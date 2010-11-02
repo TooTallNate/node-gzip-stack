@@ -1,0 +1,12 @@
+{
+  "name": "gzip-stack",
+  "description": "A `StreamStack` implementation for encoding and decoding `Gzip` content.",
+  "version": "0.0.1",
+  "author": "Nathan Rajlich <nathan@tootallnate.net>",
+  "keywords": ["stream", "stack", "gzip"],
+  "dependencies" : { "stream-stack" : "*" },
+  "devDependencies" : { "step" : "*"},
+  "main": "./gzip-stack",
+  "scripts" : { "test" : "node test.js" },
+  "engines": { "node": ">= 0.3.0" }
+}
