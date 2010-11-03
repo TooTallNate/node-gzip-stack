@@ -65,6 +65,14 @@ GzipDecoderStack.prototype.setEncoding = function(encoding) {
   this.decoder.stdout.setEncoding(encoding);
 }
 
+GzipDecoderStack.prototype.pause = function() {
+  this.decoder.stdout.pause();
+}
+
+GzipDecoderStack.prototype.resume = function() {
+  this.decoder.stdout.resume();
+}
+
 GzipDecoderStack.prototype._onGunzipData = function(chunk) {
   this.emit('data', chunk);
 }
