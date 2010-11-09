@@ -16,7 +16,7 @@ Encoding Example
 To encode data going into a writable stream, use the `GzipEncoderStack` class:
 
     var fs = require('fs');
-    var GzipEncoderStack = require('./gzip-stack').GzipEncoderStack;
+    var GzipEncoderStack = require('gzip-stack').GzipEncoderStack;
     
     var file = new GzipEncoderStack(fs.createWriteStream('hello.gz'));
     file.write("hello world!\n");
@@ -31,7 +31,7 @@ Decoding Example
 To decode data coming from a readable stream, use the `GzipDecoderStack` class:
 
     var fs = require('fs');
-    var GzipDecoderStack = require('./gzip-stack').GzipDecoderStack;
+    var GzipDecoderStack = require('gzip-stack').GzipDecoderStack;
 
     // Create a fs.ReadStream of the kernel config gzip file, and
     // then wrap it in a `GzipDecoderStack` instance.
