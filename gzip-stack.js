@@ -27,20 +27,6 @@ GzipEncoderStack.prototype.end = function(buf, enc) {
   return this.encoder.stdin.end(buf, enc);
 }
 
-Object.defineProperty(GzipEncoderStack.prototype, "readable", {
-  get: function() {
-    return this.encoder.stdin.readable;
-  },
-  enumerable: true
-});
-
-Object.defineProperty(GzipEncoderStack.prototype, "writable", {
-  get: function() {
-    return this.encoder.stdin.writable;
-  },
-  enumerable: true
-});
-
 
 /**
  * Accepts a readable stream, i.e. fs.ReadStream, and returns a StreamStack
@@ -51,26 +37,20 @@ function GzipDecoderStack(stream) {
   if (!(this instanceof GzipDecoderStack)) {
     return new GzipDecoderStack(stream);
   }
-  StreamStack.call(this, stream);
+  StreamStack.call(this, stream, {
+    data: this._onStreamData,
+    end: this._onStreamEnd
+  });
 
   this.decoder = spawn('gunzip');
   this.decoder.stdout.on('data', this._onGunzipData.bind(this));
   this.decoder.stdout.on('end', this._onGunzipEnd.bind(this));
-  this.stream.pipe(this.decoder.stdin);
 }
 inherits(GzipDecoderStack, StreamStack);
 exports.GzipDecoderStack = GzipDecoderStack;
 
 GzipDecoderStack.prototype.setEncoding = function(encoding) {
   this.decoder.stdout.setEncoding(encoding);
-}
-
-GzipDecoderStack.prototype.pause = function() {
-  this.decoder.stdout.pause();
-}
-
-GzipDecoderStack.prototype.resume = function() {
-  this.decoder.stdout.resume();
 }
 
 GzipDecoderStack.prototype._onGunzipData = function(chunk) {
@@ -81,16 +61,10 @@ GzipDecoderStack.prototype._onGunzipEnd = function() {
   this.emit('end');
 }
 
-Object.defineProperty(GzipDecoderStack.prototype, "readable", {
-  get: function() {
-    return this.encoder.stdout.readable;
-  },
-  enumerable: true
-});
+GzipDecoderStack.prototype._onStreamData = function(chunk) {
+  this.decoder.stdin.write(chunk);
+}
 
-Object.defineProperty(GzipDecoderStack.prototype, "writable", {
-  get: function() {
-    return this.encoder.stdout.writable;
-  },
-  enumerable: true
-});
+GzipDecoderStack.prototype._onStreamEnd = function() {
+  this.decoder.stdin.end();
+}
