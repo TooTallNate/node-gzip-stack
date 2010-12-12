@@ -51,9 +51,6 @@ TODO
 ----
 
  * Detect `node-compress`, and write a version that uses that by default.
- * Configuration options:
-   - Compression level
-   - What else?
 
 [StreamStack]: http://github.com/TooTallNate/node-stream-stack
 [Gzip]: http://www.gzip.org/

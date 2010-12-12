@@ -7,17 +7,24 @@ var StreamStack = require('stream-stack').StreamStack;
  * whose 'write()' calls are transparently sent to a 'gzip' process before
  * being written to the target stream.
  */
-function GzipEncoderStack(stream) {
+function GzipEncoderStack(stream, compression) {
   if (!(this instanceof GzipEncoderStack)) {
-    return new GzipEncoderStack(stream);
+    return new GzipEncoderStack(stream, compression);
   }
   StreamStack.call(this, stream);
 
-  this.encoder = spawn('gzip');
+  if (compression) {
+    process.assert(compression >= 1 && compression <= 9);
+    this.compression = compression;
+  }
+
+  this.encoder = spawn('gzip', ['-'+this.compression]);
   this.encoder.stdout.pipe(this.stream);
 }
 inherits(GzipEncoderStack, StreamStack);
 exports.GzipEncoderStack = GzipEncoderStack;
+
+GzipEncoderStack.prototype.compression = 6;
 
 GzipEncoderStack.prototype.write = function(buf, enc) {
   return this.encoder.stdin.write(buf, enc);
