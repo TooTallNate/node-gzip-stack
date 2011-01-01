@@ -7,6 +7,6 @@
   "dependencies" : { "stream-stack" : ">= 1.0.0" },
   "devDependencies" : { "step" : "*", "expresso": "*" },
   "main": "./gzip-stack",
-  "scripts" : { "test" : "expresso" },
+  "scripts" : { "test" : "expresso test/test*.js" },
   "engines": { "node": ">= 0.3.0" }
 }
